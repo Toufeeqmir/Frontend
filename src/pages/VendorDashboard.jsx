@@ -7,18 +7,14 @@ export default function VendorDashboard() {
   const { user } = useContext(AuthContext)
   const [myVendors, setMyVendors] = useState([])
   const [loading, setLoading] = useState(true)
-  const [stats, setStats] = useState({ total: 0, pending: 0, completed: 0 })
+  const [deleteLoading, setDeleteLoading] = useState(null)
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(null)
 
   useEffect(() => {
     const fetchMyVendors = async () => {
       try {
         const res = await axiosInstance.get('/vendors/me')
         setMyVendors(res.data)
-        setStats({
-          total: res.data.length,
-          pending: Math.floor(Math.random() * 5),
-          completed: Math.floor(Math.random() * 10),
-        })
       } catch (err) {
         console.error('Error fetching vendors:', err)
       } finally {
@@ -28,29 +24,27 @@ export default function VendorDashboard() {
     fetchMyVendors()
   }, [])
 
-  if (loading) return <div className="text-center py-12">Loading...</div>
+  const handleDelete = async (vendorId) => {
+    try {
+      setDeleteLoading(vendorId)
+      await axiosInstance.delete(`/vendors/${vendorId}`)
+      setMyVendors(myVendors.filter(v => v._id !== vendorId))
+      setShowDeleteConfirm(null)
+    } catch (err) {
+      console.error('Error deleting vendor:', err)
+      alert(err.response?.data?.message || 'Failed to delete service')
+    } finally {
+      setDeleteLoading(null)
+    }
+  }
+
+  if (loading) return <div className="text-center py-12"><p className="text-haat-deep/70">Loading...</p></div>
 
   return (
     <main className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
       <div className="mb-8">
         <h1 className="text-4xl font-bold text-haat-deep">Vendor Dashboard</h1>
         <p className="mt-2 text-haat-deep/70">Welcome back, {user?.name}</p>
-      </div>
-
-      {/* Stats */}
-      <div className="grid gap-4 sm:grid-cols-3 mb-8">
-        <div className="rounded-2xl bg-gradient-to-br from-haat-rose/20 to-haat-gold/20 p-6">
-          <p className="text-sm text-haat-deep/70">Total Listings</p>
-          <p className="mt-2 text-4xl font-bold text-haat-rose">{stats.total}</p>
-        </div>
-        <div className="rounded-2xl bg-gradient-to-br from-haat-gold/20 to-haat-blush/20 p-6">
-          <p className="text-sm text-haat-deep/70">Pending Bookings</p>
-          <p className="mt-2 text-4xl font-bold text-haat-gold">{stats.pending}</p>
-        </div>
-        <div className="rounded-2xl bg-gradient-to-br from-haat-blush/20 to-haat-rose/20 p-6">
-          <p className="text-sm text-haat-deep/70">Completed</p>
-          <p className="mt-2 text-4xl font-bold text-haat-deep">{stats.completed}</p>
-        </div>
       </div>
 
       {/* Actions */}
@@ -83,12 +77,20 @@ export default function VendorDashboard() {
                 <p className="mt-2 text-sm text-haat-deep/70">{vendor.category}</p>
                 <p className="mt-2 font-semibold text-haat-deep">₹{vendor.price.toLocaleString()}</p>
                 <p className="mt-1 text-sm text-haat-deep/70">{vendor.location}</p>
+                
+                {vendor.packages && vendor.packages.length > 0 && (
+                  <div className="mt-3 p-2 bg-white/50 rounded text-xs">
+                    <p className="font-semibold text-haat-deep/70">{vendor.packages.length} package(s)</p>
+                  </div>
+                )}
+
                 <div className="mt-4 flex gap-2">
-                  <button className="flex-1 rounded px-3 py-2 bg-haat-deep text-white text-sm font-medium hover:bg-haat-deep/90 transition">
-                    Edit
-                  </button>
-                  <button className="flex-1 rounded px-3 py-2 bg-haat-rose/20 text-haat-rose text-sm font-medium hover:bg-haat-rose/30 transition">
-                    Delete
+                  <button
+                    onClick={() => setShowDeleteConfirm(vendor._id)}
+                    className="flex-1 rounded px-3 py-2 bg-red-600 text-white text-sm font-medium hover:bg-red-700 transition disabled:opacity-50"
+                    disabled={deleteLoading === vendor._id}
+                  >
+                    {deleteLoading === vendor._id ? 'Deleting...' : 'Delete'}
                   </button>
                 </div>
               </div>
@@ -106,6 +108,33 @@ export default function VendorDashboard() {
           </div>
         )}
       </div>
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteConfirm && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="rounded-2xl bg-white p-8 max-w-md w-full mx-4 shadow-2xl">
+            <h2 className="text-2xl font-bold text-haat-deep mb-4">Delete Service?</h2>
+            <p className="text-haat-deep/70 mb-6">
+              Are you sure you want to delete this service? This action cannot be undone.
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowDeleteConfirm(null)}
+                className="flex-1 rounded-lg bg-haat-deep/10 px-4 py-2 font-semibold text-haat-deep hover:bg-haat-deep/20 transition"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => handleDelete(showDeleteConfirm)}
+                disabled={deleteLoading === showDeleteConfirm}
+                className="flex-1 rounded-lg bg-red-600 px-4 py-2 font-semibold text-white hover:bg-red-700 transition disabled:opacity-50"
+              >
+                {deleteLoading === showDeleteConfirm ? 'Deleting...' : 'Delete'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   )
 }

@@ -19,11 +19,37 @@ export default function AddService() {
     price: '',
     location: '',
     images: '',
+    packages: [],
   })
+  const [newPackage, setNewPackage] = useState({ name: '', price: '', details: '' })
 
   const handleChange = (e) => {
     const { name, value } = e.target
     setFormData(prev => ({ ...prev, [name]: value }))
+  }
+
+  const handlePackageChange = (e) => {
+    const { name, value } = e.target
+    setNewPackage(prev => ({ ...prev, [name]: value }))
+  }
+
+  const addPackage = () => {
+    if (newPackage.name && newPackage.price) {
+      setFormData(prev => ({
+        ...prev,
+        packages: [...prev.packages, { ...newPackage, price: parseInt(newPackage.price) }]
+      }))
+      setNewPackage({ name: '', price: '', details: '' })
+    } else {
+      alert('Please fill in package name and price')
+    }
+  }
+
+  const removePackage = (index) => {
+    setFormData(prev => ({
+      ...prev,
+      packages: prev.packages.filter((_, i) => i !== index)
+    }))
   }
 
   const handleSubmit = async (e) => {
@@ -94,7 +120,7 @@ export default function AddService() {
 
         <div className="grid gap-6 sm:grid-cols-2 mb-6">
           <div>
-            <label className="block text-sm font-semibold text-haat-deep mb-2">Price (₹)</label>
+            <label className="block text-sm font-semibold text-haat-deep mb-2">Base Price (₹)</label>
             <input
               type="number"
               name="price"
@@ -119,7 +145,7 @@ export default function AddService() {
           </div>
         </div>
 
-        <div className="mb-8">
+        <div className="mb-6">
           <label className="block text-sm font-semibold text-haat-deep mb-2">Image URLs (comma separated)</label>
           <textarea
             name="images"
@@ -129,6 +155,67 @@ export default function AddService() {
             className="w-full rounded-lg border border-haat-deep/20 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-haat-rose"
             placeholder="https://example.com/image1.jpg, https://example.com/image2.jpg"
           />
+        </div>
+
+        {/* Pricing Packages */}
+        <div className="mb-8">
+          <h3 className="text-lg font-semibold text-haat-deep mb-4">Pricing Packages</h3>
+          
+          <div className="rounded-lg border border-haat-deep/10 p-4 mb-4">
+            <div className="grid gap-3 sm:grid-cols-3 mb-3">
+              <input
+                type="text"
+                name="name"
+                value={newPackage.name}
+                onChange={handlePackageChange}
+                placeholder="Package name (e.g., Silver)"
+                className="rounded-lg border border-haat-deep/20 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-haat-rose text-sm"
+              />
+              <input
+                type="number"
+                name="price"
+                value={newPackage.price}
+                onChange={handlePackageChange}
+                placeholder="Price"
+                className="rounded-lg border border-haat-deep/20 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-haat-rose text-sm"
+              />
+              <input
+                type="text"
+                name="details"
+                value={newPackage.details}
+                onChange={handlePackageChange}
+                placeholder="Details (e.g., 4 hours coverage)"
+                className="rounded-lg border border-haat-deep/20 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-haat-rose text-sm"
+              />
+            </div>
+            <button
+              type="button"
+              onClick={addPackage}
+              className="w-full rounded-lg bg-haat-gold/20 px-3 py-2 text-sm font-semibold text-haat-deep hover:bg-haat-gold/30 transition"
+            >
+              + Add Package
+            </button>
+          </div>
+
+          {formData.packages.length > 0 && (
+            <div className="space-y-2 mb-4">
+              {formData.packages.map((pkg, idx) => (
+                <div key={idx} className="flex items-center justify-between p-3 rounded-lg bg-haat-blush/20">
+                  <div>
+                    <p className="font-semibold text-haat-deep">{pkg.name} - ₹{pkg.price?.toLocaleString()}</p>
+                    <p className="text-xs text-haat-deep/70">{pkg.details}</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => removePackage(idx)}
+                    className="px-3 py-1 text-xs font-semibold text-red-600 hover:bg-red-50 rounded transition"
+                  >
+                    Remove
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="flex gap-4">

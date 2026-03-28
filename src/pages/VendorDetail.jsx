@@ -23,8 +23,13 @@ export default function VendorDetail() {
       setLoading(true)
       const response = await axiosInstance.get(`/vendors/${id}`)
       setVendor(response.data)
+      
+      // Set initial selected package
       if (response.data.packages && response.data.packages.length > 0) {
         setSelectedPackage(response.data.packages[0].name)
+      } else {
+        // Use standard as fallback if no packages
+        setSelectedPackage('Standard')
       }
       setError('')
     } catch (err) {
@@ -43,11 +48,16 @@ export default function VendorDetail() {
 
     try {
       setBookingLoading(true)
+      const selectedPkg = vendor.packages?.find(pkg => pkg.name === selectedPackage)
+      const amount = selectedPkg?.price || vendor.price || 0
+      
       await axiosInstance.post('/booking', {
         vendorId: id,
+        vendorUserId: vendor.owner?._id || vendor.owner,
         date,
         package: selectedPackage,
         location,
+        amount,
       })
       setBookingSuccess(true)
       setTimeout(() => {
@@ -159,11 +169,16 @@ export default function VendorDetail() {
             onChange={(e) => setSelectedPackage(e.target.value)}
             className="mt-1 w-full rounded-xl border border-haat-deep/20 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-haat-gold"
           >
-            {vendor.packages && vendor.packages.map((pkg) => (
-              <option key={pkg.name} value={pkg.name}>
-                {pkg.name} - ₹{pkg.price?.toLocaleString()}
-              </option>
-            ))}
+            <option value="">-- Select a package --</option>
+            {vendor.packages && vendor.packages.length > 0 ? (
+              vendor.packages.map((pkg) => (
+                <option key={pkg.name} value={pkg.name}>
+                  {pkg.name} - ₹{pkg.price?.toLocaleString()}
+                </option>
+              ))
+            ) : (
+              <option value="Standard">Standard - ₹{vendor.price?.toLocaleString()}</option>
+            )}
           </select>
 
           <button

@@ -120,28 +120,74 @@ export default function SmartMatch() {
           ) : (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {recommendations.map((vendor) => (
-                <article key={vendor._id} className="rounded-2xl border border-haat-deep/10 bg-white p-6 shadow-soft hover:shadow-lg transition">
-                  <div className="flex items-start justify-between gap-2">
-                    <div>
-                      <h3 className="text-lg font-semibold text-haat-deep">{vendor.name}</h3>
-                      <p className="text-sm text-haat-deep/70">{vendor.category}</p>
+                <article key={vendor._id} className="rounded-2xl border border-haat-deep/10 bg-white overflow-hidden shadow-soft hover:shadow-lg transition">
+                  {/* Image Section */}
+                  {vendor.images && vendor.images.length > 0 && (
+                    <div className="h-40 w-full bg-gradient-to-br from-haat-gold/20 to-haat-rose/20 overflow-hidden">
+                      <img 
+                        src={vendor.images[0]} 
+                        alt={vendor.name}
+                        className="h-full w-full object-cover"
+                        onError={(e) => {
+                          e.target.src = 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1600&q=80'
+                        }}
+                      />
                     </div>
-                    <span className="inline-block rounded-full bg-haat-gold/20 px-3 py-1 text-sm font-bold text-haat-deep">
-                      {vendor.score}%
-                    </span>
+                  )}
+                  
+                  <div className="p-6">
+                    {/* Header */}
+                    <div className="flex items-start justify-between gap-2 mb-3">
+                      <div>
+                        <h3 className="text-lg font-semibold text-haat-deep">{vendor.name}</h3>
+                        <p className="text-sm text-haat-deep/70">{vendor.category}</p>
+                      </div>
+                      <span className="inline-block rounded-full bg-green-100 px-3 py-1 text-sm font-bold text-green-700">
+                        {vendor.score}% Match
+                      </span>
+                    </div>
+                    
+                    {/* Description */}
+                    <p className="text-sm text-haat-deep/70 line-clamp-2 mb-3">{vendor.description}</p>
+                    
+                    {/* Info Grid */}
+                    <div className="grid grid-cols-2 gap-2 mb-4 text-xs">
+                      <div className="rounded-lg bg-haat-deep/5 p-2">
+                        <p className="text-haat-deep/60">Location</p>
+                        <p className="font-semibold text-haat-deep">📍 {vendor.location}</p>
+                      </div>
+                      <div className="rounded-lg bg-haat-deep/5 p-2">
+                        <p className="text-haat-deep/60">Rating</p>
+                        <p className="font-semibold text-haat-deep">⭐ {vendor.rating || 4.5}</p>
+                      </div>
+                    </div>
+                    
+                    {/* Price */}
+                    <p className="text-lg font-semibold text-haat-rose mb-4">₹{vendor.price?.toLocaleString()}</p>
+                    
+                    {/* Packages Info */}
+                    {vendor.packages && vendor.packages.length > 0 && (
+                      <div className="mb-4 text-xs">
+                        <p className="font-semibold text-haat-deep/70 mb-2">{vendor.packages.length} Package(s) Available:</p>
+                        <div className="space-y-1">
+                          {vendor.packages.slice(0, 2).map((pkg, idx) => (
+                            <p key={idx} className="text-haat-deep/60">• {pkg.name} - ₹{pkg.price?.toLocaleString()}</p>
+                          ))}
+                          {vendor.packages.length > 2 && (
+                            <p className="text-haat-deep/60 italic">+ {vendor.packages.length - 2} more</p>
+                          )}
+                        </div>
+                      </div>
+                    )}
+                    
+                    {/* CTA Button */}
+                    <Link
+                      to={`/vendor/${vendor._id}`}
+                      className="mt-4 inline-block w-full text-center rounded-lg bg-haat-deep px-4 py-3 font-semibold text-white transition hover:bg-haat-deep/90"
+                    >
+                      Book Now →
+                    </Link>
                   </div>
-                  <p className="mt-2 text-sm text-haat-deep/70 line-clamp-2">{vendor.description}</p>
-                  <div className="mt-4 flex gap-2 text-xs text-haat-deep/60">
-                    <span>📍 {vendor.location}</span>
-                    <span>⭐ {vendor.rating || 4.5}</span>
-                  </div>
-                  <p className="mt-3 text-lg font-semibold text-haat-deep">₹{vendor.price?.toLocaleString()}</p>
-                  <Link
-                    to={`/vendor/${vendor._id}`}
-                    className="mt-4 inline-block w-full text-center rounded-lg bg-haat-deep px-4 py-2 font-semibold text-white transition hover:bg-haat-deep/90"
-                  >
-                    View Details
-                  </Link>
                 </article>
               ))}
             </div>
