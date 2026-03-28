@@ -17,10 +17,7 @@ export default function Navbar() {
             className="flex h-9 w-9 items-center justify-center rounded-lg bg-haat-deep text-lg font-semibold text-haat-cream shadow-soft"
             aria-hidden
           >
-            श
-          </span>
-          <span className="font-display text-xl font-semibold tracking-tight text-haat-deep sm:text-2xl">
-            ShaadiHaat <span className="text-haat-gold">Lite</span>
+            SH
           </span>
         </NavLink>
         <nav className="flex flex-wrap items-center justify-end gap-1 sm:gap-2" aria-label="Main">
@@ -35,9 +32,6 @@ export default function Navbar() {
           </NavLink>
           <NavLink to="/smart-match" className={linkClass}>
             Smart Match
-          </NavLink>
-          <NavLink to="/about" className={linkClass}>
-            About
           </NavLink>
         </nav>
       </div>

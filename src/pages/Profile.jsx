@@ -93,7 +93,7 @@ export default function Profile() {
             </ul>
           </div>
           <div className="mt-10 rounded-2xl bg-haat-cream p-5 text-center text-sm text-haat-deep/70">
-            This is a static demo. Connect and messaging are not implemented in ShaadiHaat Lite.
+            This is a static demo. Connect and messaging are not implemented in ShaadiHaat.
           </div>
         </div>
       </article>
