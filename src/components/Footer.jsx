@@ -12,9 +12,6 @@ export default function Footer() {
           <Link to="/browse" className="font-medium text-haat-rose hover:underline">
             Browse profiles
           </Link>
-          <Link to="/about" className="font-medium text-haat-rose hover:underline">
-            About
-          </Link>
         </div>
       </div>
     </footer>
