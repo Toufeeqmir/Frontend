@@ -1,6 +1,9 @@
+# Backend repository link: 
+https://github.com/CodeWithMomin/shadihaat-backend
+
 # Shaadihaat Frontend
 
-Modern, responsive React + Vite web application for discovering and booking wedding vendors with AI-powered smart matching.
+Modern, responsive  web application for discovering and booking wedding vendors with AI-powered smart matching and budget control.
 
 ## Overview
 
@@ -17,11 +20,11 @@ Shaadihaat is a wedding planner's best friend - browse vetted wedding vendors, g
 
 ## Tech Stack
 
-- **Framework**: React 18.3.1
-- **Build Tool**: Vite 5.4.11
-- **Styling**: Tailwind CSS 3.4.15
-- **Routing**: React Router 6.30.3
-- **HTTP Client**: Axios 1.14.0
+- **Framework**: React 
+- **Build Tool**: Vite
+- **Styling**: Tailwind CSS 
+- **Routing**: React Router
+- **HTTP Client**: Axios 
 - **Package Manager**: npm
 
 ## Project Structure
@@ -102,20 +105,6 @@ The application will start on `http://localhost:5173`
 
 Open your browser and navigate to the URL shown in the terminal.
 
-## Build for Production
-
-```bash
-npm run build
-```
-
-This creates an optimized production build in the `dist/` folder.
-
-## Preview Production Build
-
-```bash
-npm run preview
-```
-
 ## Project Features
 
 ### 1. **Home Page** (`/`)
@@ -165,18 +154,6 @@ npm run preview
 - Manage services
 - Add new services
 
-## Color System (Tailwind)
-
-Custom Shaadihaat color palette:
-
-```css
---haat-deep: #8B3A52     /* Deep burgundy */
---haat-rose: #D63384     /* Vibrant rose */
---haat-gold: #FFC107     /* Warm gold */
---haat-blush: #FFE4E1    /* Soft blush */
---haat-cream: #FFF8F0    /* Warm cream */
-```
-
 ## Authentication
 
 ### How It Works
@@ -186,15 +163,6 @@ Custom Shaadihaat color palette:
 3. **Storage** - Token stored in localStorage
 4. **Auto-Injection** - Axios interceptor adds token to all requests
 5. **Protected Routes** - Wrapped with `ProtectedRoute` component
-
-### AuthContext
-
-Global state management for user data:
-
-```javascript
-const { user, setUser } = useContext(AuthContext)
-// user = { email, name, token, role, id }
-```
 
 ## API Integration
 
@@ -216,48 +184,6 @@ axiosInstance.get('/api/vendors')
 - `POST /api/booking` - Create booking
 - `POST /api/ai/smart-match` - Get recommendations
 
-## Responsive Design
-
-Built with Tailwind CSS responsive utilities:
-
-- **Mobile**: Single column layouts, touch-friendly buttons
-- **Tablet**: 2-column grids for vendor cards
-- **Desktop**: 3-column grids, full navigation
-
-Breakpoints:
-- `sm` - 640px
-- `md` - 768px
-- `lg` - 1024px
-- `xl` - 1280px
-
-## Performance Features
-
-- ✅ Image fallback system prevents broken images
-- ✅ Smooth loading transitions (300ms fade)
-- ✅ Delayed spinner to avoid flashing on fast networks
-- ✅ Disabled buttons during loading to prevent multiple submissions
-- ✅ Optimized components with React hooks
-
-## Environment Setup
-
-Backend URL is configured in `src/utils/axiosInstance.js`:
-
-```javascript
-const baseURL = 'http://localhost:5000'
-```
-
-Ensure backend is running before starting frontend development.
-
-## Troubleshooting
-
-| Issue | Solution |
-|-------|----------|
-| Blank page | Check browser console for errors, ensure backend is running |
-| API errors | Verify backend is on `http://localhost:5000` |
-| Images not loading | Check network tab, images have fallback to default wedding photo |
-| Login failing | Ensure backend database is seeded and backend server is running |
-| CORS errors | Backend should have CORS enabled for `http://localhost:5173` |
-
 ## Development Workflow
 
 1. Start backend: `npm start` (from backend folder)
@@ -266,13 +192,6 @@ Ensure backend is running before starting frontend development.
 4. Make changes - Vite will hot-reload automatically
 5. Check browser console for errors
 
-## Building for Production
-
-```bash
-npm run build
-```
-
-Deploy the `dist/` folder to your hosting service (Vercel, Netlify, GitHub Pages, etc.)
 
 ## License
 
