@@ -24,8 +24,14 @@ export default function Navbar() {
           <NavLink to="/" end className={linkClass}>
             Home
           </NavLink>
-          <NavLink to="/browse" className={linkClass}>
-            Browse
+          <NavLink to="/vendors" className={linkClass}>
+            Vendors
+          </NavLink>
+          <NavLink to="/budget-planner" className={linkClass}>
+            Budget Planner
+          </NavLink>
+          <NavLink to="/smart-match" className={linkClass}>
+            Smart Match
           </NavLink>
         </nav>
       </div>
