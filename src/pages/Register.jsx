@@ -8,7 +8,7 @@ export default function Register() {
     name: "",
     email: "",
     password: "",
-    role: "user", // default
+    role: "customer", // default
   });
 
   const [loading, setLoading] = useState(false);
@@ -94,10 +94,11 @@ export default function Register() {
           <select
             name="role"
             onChange={handleChange}
+            value={form.role}
             className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400"
           >
-            <option value="user">User</option>
-            <option value="admin">Admin</option>
+            <option value="customer">Customer</option>
+            <option value="vendor">Vendor</option>
           </select>
 
           {/* Button */}

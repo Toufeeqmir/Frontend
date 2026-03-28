@@ -10,3 +10,17 @@
     @apply bg-haat-cream text-haat-deep antialiased;
   }
 }
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+.transition-fade {
+  transition: opacity 0.2s ease-in-out;
+}
